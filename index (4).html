@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V1 CX00 - OVERLORD</title>
+
+<style>
+/* EFECTO CRT Y FONDO PREMIUM */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    background: 
+        linear-gradient(rgba(0,0,0,0.88), rgba(15,0,0,0.98)), 
+        url("logo.png"); 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #000000; 
+
+    font-family: 'Courier New', monospace;
+    color: #ff0033;
+    overflow: hidden;
+}
+
+/* Líneas de escaneo estilo monitor hacker */
+body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+    z-index: 10;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* PANEL PRINCIPAL REFORZADO */
+.panel {
+    width: 440px;
+    max-height: 92vh; 
+    padding: 30px;
+    border: 2px solid #ff0033;
+    background: rgba(6, 0, 0, 0.92); 
+    box-shadow: 
+        0 0 25px rgba(255, 0, 51, 0.3), 
+        inset 0 0 20px rgba(139, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+    overflow-y: auto; 
+    z-index: 5;
+}
+
+/* BARRA DE SCROLL SÚPER DELGADA CYBERPUNK */
+.panel::-webkit-scrollbar {
+    width: 4px;
+}
+.panel::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.9);
+}
+.panel::-webkit-scrollbar-thumb {
+    background: #ff0033;
+    box-shadow: 0 0 12px #ff0033;
+}
+
+/* GLITCH RADICAL EN EL TITULAR */
+.glitch {
+    font-size: 48px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+    color: #fff;
+    text-shadow: 0 0 10px #ff0033;
+    animation: glitch 0.4s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+    0% { text-shadow: 3px 0 #00ffff, -3px 0 #ff0033; transform: skewX(1deg); }
+    50% { text-shadow: -3px 0 #00ffff, 3px 0 #ff0033; transform: skewX(-1deg); }
+    100% { text-shadow: 3px 2px #ff0033, -3px -2px #00ffff; }
+}
+
+.info-box {
+    margin: 20px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    border-left: 2px solid #ff0033;
+    padding-left: 10px;
+}
+
+.info-box p {
+    margin: 6px 0;
+}
+
+.info-box span {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+/* BOTÓN DE CONTROL TIPO ACTIVACIÓN CRÍTICA */
+button {
+    width: 100%;
+    background: #ff0033;
+    color: #000;
+    border: 1px solid #000;
+    padding: 14px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 0 15px #ff0033;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    background: #fff;
+    color: #ff0033;
+    box-shadow: 0 0 25px #fff;
+    transform: scale(1.02);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* BARRA DE PROGRESO INDUSTRIAL */
+.progress-container {
+    border: 1px solid #ff0033; 
+    width: 100%; 
+    height: 22px; 
+    margin-top: 20px;
+    background: #000;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+#barra {
+    background: linear-gradient(90deg, #8b0000, #ff0033); 
+    width: 0%; 
+    height: 100%;
+    box-shadow: 0 0 10px #ff0033;
+    transition: width 0.1s linear;
+}
+
+/* TERMINAL LOG INTEGRADA */
+.log {
+    border: 1px solid rgba(255, 0, 51, 0.4);
+    height: 130px;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    font-size: 11.5px;
+    color: #00ff66;
+}
+
+.log::-webkit-scrollbar {
+    width: 3px;
+}
+.log::-webkit-scrollbar-thumb {
+    background: #00ff66;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+    <h1 class="glitch">V1 CX00</h1>
+
+    <div class="info-box">
+        <p>[IP] <span id="ip">Rastreando red...</span></p>
+        <p>[DISPOSITIVO REAL] <span id="device" style="color: #00ff66;">Iniciando rastreo...</span></p>
+        <p>[SISTEMA OPERATIVO] <span id="os">Detectando...</span></p>
+        <p>[NAVEGADOR] <span id="browser">Detectando...</span></p>
+        <p>[BATERÍA] <span id="battery">Detectando energía...</span></p>
+        <p>[ESTADO WEB] <span id="web-status">Detectando...</span></p>
+        <p>[HORA LOCAL] <span id="time">00:00:00</span></p>
+        <p>[PAÍS] <span id="country">Buscando ubicación...</span></p>
+        <p>[MARCA DEL DISPOSITIVO] <span id="brand">Identificando...</span></p>
+        <p>[VELOCIDAD INTERNET] <span id="net-speed">Midiendo ancho de banda...</span></p>
+    </div>
+
+    <button onclick="scanVirus()">EJECUTAR BRECHA DE SEGURIDAD</button>
+
+    <div class="progress-container">
+        <div id="barra"></div>
+    </div>
+
+    <div class="info-box" style="border-color: #fff;">
+        <p>[PROGRESO] <span id="porcentaje" style="color: #ff0033;">0%</span></p>
+        <p>[ESTADO ANTIVIRUS] <span id="virus" style="color: #ff0033;">SYSTEM READY...</span></p>
+    </div>
+
+    <div class="log" id="log">> Terminal inicializada correctamente.<br>> Analizando arquitectura de red...<br></div>
+
+    <audio id="scanSound" src="https://www.soundjay.com/machine/scanner-beep-01.mp3"></audio>
+    <audio id="alarmSound" src="https://www.soundjay.com/button/button-10.mp3"></audio>
+</div>
+
+<script>
+let detectedOS = "Desconocido"; 
+
+function getHardwareSpecs() {
+    let ua = navigator.userAgent;
+    let platform = navigator.platform || "";
+    let os = "Detectando...";
+    let browser = "Navegador Estándar";
+    let brand = "Genérica";
+
+    // DETECTOR DE ENTORNOS ULTRA SEGURO
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+        os = "iOS / iPadOS";
+        detectedOS = "iOS";
+        brand = "APPLE";
+    } else if (/Android/i.test(ua)) {
+        os = "Android OS";
+        detectedOS = "Android";
+        brand = "Dispositivo Móvil Android";
+        if (/Samsung|SM-/i.test(ua)) brand = "SAMSUNG";
+        else if (/Xiaomi|Redmi|POCO|Mi /i.test(ua)) brand = "XIAOMI";
+        else if (/Huawei|HUAWEI|Honor/i.test(ua)) brand = "HUAWEI";
+        else if (/Motorola|Moto/i.test(ua)) brand = "MOTOROLA";
+        else if (/Oppo|OPPO/i.test(ua)) brand = "OPPO";
+        else if (/Infinix/i.test(ua)) brand = "INFINIX";
+        else if (/Tecno/i.test(ua)) brand = "TECNO MOBILE";
+    } else if (/Win/i.test(platform) || /Windows/i.test(ua)) {
+        os = "Windows 10 / 11";
+        detectedOS = "Windows";
+        brand = "PC Windows";
+    } else if (/Mac/i.test(platform) || /Macintosh/i.test(ua)) {
+        os = "macOS";
+        detectedOS = "macOS";
+        brand = "APPLE (MacBook)";
+    } else if (/Linux/i.test(ua) || /Linux/i.test(platform)) {
+        os = "Linux x86_64";
+        detectedOS = "Linux-PC";
+        brand = "Linux Rig / Workstation";
+    }
+
+    if (/Edg\//i.test(ua)) browser = "Microsoft Edge";
+    else if (/Chrome/i.test(ua)) browser = "Google Chrome";
+    else if (/Firefox/i.test(ua)) browser = "Mozilla Firefox";
+    else if (/Safari/i.test(ua)) browser = "Apple Safari";
+
+    return { os: os, browser: browser, brand: brand };
+}
+
+let system = getHardwareSpecs();
+document.getElementById("os").innerText = system.os;
+document.getElementById("browser").innerText = system.browser;
+document.getElementById("brand").innerText = system.brand;
+
+// INTEGRACIÓN INTELIGENTE DE DISPOSITIVOS MÓVILES REALES Y COMPUTADORAS
+function forceDeviceEngine() {
+    let devBox = document.getElementById("device");
+    let ua = navigator.userAgent;
+    
+    let applePool = ["iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 14 Pro Max", "iPhone 13 Pro Max", "iPhone 12 Pro"];
+    let androidPool = ["Galaxy S24 Ultra", "Galaxy S23 Ultra", "POCO X6 Pro 5G", "Redmi Note 13 Pro+", "Galaxy A55 5G"];
+    let pcPool = ["Intel Core i7 / NVIDIA RTX Rig", "AMD Ryzen 7 Gaming Setup", "Custom Computer Rig (x86_64)"];
+
+    let targetDevice = pcPool[Math.floor(Math.random() * pcPool.length)];
+
+    if (detectedOS === "iOS") {
+        targetDevice = applePool[Math.floor(Math.random() * applePool.length)];
+    } else if (detectedOS === "Android") {
+        let matches = ua.match(/Android.*;\s*([^;)]+)\s*(?:Build|Version)/);
+        if (matches && matches[1] && !/Android/i.test(matches[1])) {
+            let modelCode = matches[1].trim().toUpperCase();
+            if (/SM-S928/i.test(modelCode)) targetDevice = "Galaxy S24 Ultra";
+            else if (/SM-S918/i.test(modelCode)) targetDevice = "Galaxy S23 Ultra";
+            else if (/SM-A55/i.test(modelCode)) targetDevice = "Galaxy A55 5G";
+            else if (/SM-G998/i.test(modelCode)) targetDevice = "Galaxy S21 Ultra";
+            else targetDevice = modelCode; 
+        } else {
+            targetDevice = androidPool[Math.floor(Math.random() * androidPool.length)];
+        }
+    } else if (detectedOS === "Linux-PC") {
+        targetDevice = "Linux Custom PC (x86_64)";
+    }
+
+    let timer = 0;
+    let matrix = setInterval(() => {
+        let glitchChars = "ABCDEF0123456789X#@$";
+        let str = "";
+        for(let i=0; i<12; i++) {
+            str += glitchChars.charAt(Math.floor(Math.random() * glitchChars.length));
+        }
+        devBox.innerText = "0x" + str;
+        timer++;
+
+        if(timer > 18) { 
+            clearInterval(matrix);
+            devBox.innerText = targetDevice; 
+            devBox.style.color = "#ffffff"; 
+        }
+    }, 60);
+}
+forceDeviceEngine();
+
+// VELOCIDAD DE INTERNET REFRESCADA COMPLETAMENTE CADA 1 SEGUNDO
+function updateNetworkSpeedRealtime() {
+    let speedBox = document.getElementById("net-speed");
+    setInterval(() => {
+        if (navigator.connection && navigator.connection.downlink) {
+            let hardwareSpeed = navigator.connection.downlink;
+            let microFluctuation = (Math.random() * 2.2) - 1.1;
+            let currentCalculated = Math.max(0.5, (hardwareSpeed + microFluctuation)).toFixed(1);
+            speedBox.innerText = currentCalculated + " Mbps / segundo";
+        } else {
+            let randomBase = 58.4; 
+            let wave = (Math.sin(Date.now() / 4000) * 14) + (Math.random() * 6 - 3); 
+            let finalOutput = (randomBase + wave).toFixed(1);
+            speedBox.innerText = finalOutput + " Mbps / segundo";
+        }
+    }, 1000); 
+}
+updateNetworkSpeedRealtime();
+
+if (navigator.getBattery) {
+    navigator.getBattery().then(function(battery) {
+        function updateBatteryStatus() {
+            let numLevel = Math.round(battery.level * 100);
+            document.getElementById("battery").innerText = numLevel + "%" + (battery.charging ? " [CONECTADO ⚡]" : " [DESCONECTADO]");
+        }
+        updateBatteryStatus();
+        battery.addEventListener('levelchange', updateBatteryStatus);
+    });
+} else {
+    document.getElementById("battery").innerText = "ALIMENTACIÓN CONTINUA";
+}
+
+function updateWebStatus() {
+    let statusBox = document.getElementById("web-status");
+    if (navigator.onLine) {
+        statusBox.innerText = "ONLINE";
+        statusBox.style.color = "#00ff66";
+    } else {
+        statusBox.innerText = "OFFLINE";
+        statusBox.style.color = "#ff0033";
+    }
+}
+updateWebStatus();
+
+function updateClock() {
+    let ahora = new Date();
+    document.getElementById("time").innerText = 
+        String(ahora.getHours()).padStart(2, '0') + ":" + 
+        String(ahora.getMinutes()).padStart(2, '0') + ":" + 
+        String(ahora.getSeconds()).padStart(2, '0');
+}
+setInterval(updateClock, 1000);
+updateClock(); 
+
+// NUEVO SISTEMA HÍBRIDO DE RASTREO IP RESISTENTE A CORS LOCAL
+// Intento 1: Proveedor principal rápido (ipapi)
+fetch("https://ipapi.co/json/")
+    .then(r => r.json())
+    .then(data => {
+        if(data.ip) {
+            document.getElementById("ip").innerText = data.ip;
+            document.getElementById("country").innerText = (data.country_name || "ZONA CONTROLADA").toUpperCase();
+        } else {
+            throw new Error("Estructura incompleta");
+        }
+    })
+    .catch(() => {
+        // Intento 2: Proveedor de respaldo directo si falla el primero en modo local
+        fetch("https://api.ipify.org?format=json")
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById("ip").innerText = data.ip || "192.168.1.100 [LOCAL]";
+                document.getElementById("country").innerText = "RED DETECTADA";
+            })
+            .catch(() => {
+                // Caída elegante si el navegador bloquea todo de forma estricta offline
+                document.getElementById("ip").innerText = "LOCAL_BYPASS_CONNECTED";
+                document.getElementById("country").innerText = "ZONA RESTRINGIDA";
+            });
+    });
+
+function log(msg) {
+    let logBox = document.getElementById("log");
+    logBox.innerHTML += "> " + msg + "<br>";
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+function scanVirus() {
+    let sonido = document.getElementById("scanSound");
+    let alarma = document.getElementById("alarmSound");
+    sonido.currentTime = 0;
+    sonido.loop = true;
+    sonido.play().catch(() => {});
+
+    log("Inyectando exploit en memoria volatil...");
+    
+    let progreso = 0;
+    let barra = document.getElementById("barra");
+    let texto = document.getElementById("porcentaje");
+    document.getElementById("virus").innerText = "PENETRANDO EN EL KERNEL...";
+
+    const virusPorOS = {
+        "Windows": ["Trojan.Win32.WannaCry.m", "Ransomware.Locky.EXE", "Win32.Malware.CX00"],
+        "Android": ["Android.Trojan.Spy.Pegasus", "Malware.AndroidOS.Triada"],
+        "iOS": ["Spyware.WebKit.Pegasus.X", "Exploit.iOS.CoreGraphics"],
+        "macOS": ["OSX.Trojan.Shlayer", "MacOS.Malware.XCSSET"],
+        "Linux-PC": ["Linux.Backdoor.XorDDoS", "Malware.Linux.Mirai"]
+    };
+
+    let intervalo = setInterval(() => {
+        progreso += Math.floor(Math.random() * 5) + 2;
+
+        if (progreso >= 100) {
+            progreso = 100;
+            clearInterval(intervalo);
+
+            let lista = virusPorOS[detectedOS] || virusPorOS["Windows"];
+            let detectado = lista[Math.floor(Math.random() * lista.length)];
+
+            document.getElementById("virus").innerText = "💥 ACCESO TOTAL COMPROMETIDO";
+            log("¡SISTEMA DERRIBADO CON ÉXITO!: " + detectado);
+
+            sonido.pause();
+            alarma.currentTime = 0;
+            alarma.play().catch(() => {}); 
+        } else {
+            if (progreso > 20 && progreso < 35) log("Vulnerando cortafuegos perimetral...");
+            if (progreso > 50 && progreso < 65) log("Extrayendo hashes de contraseñas de administrador...");
+            if (progreso > 80 && progreso < 90) log("Instalando payload persistente cx00...");
+        }
+
+        barra.style.width = progreso + "%";
+        texto.innerText = progreso + "%";
+
+    }, 100);
+}
+</script>
+
+</body>
+</html>
